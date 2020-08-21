@@ -74,11 +74,53 @@ class AccountController extends ProjectComponentController {
             $this->setReturnValue("Message","User role configuration incorrect");
             $this->presentOutput();
         }
-        $AccountToCreateObj->FullName = $AccountToCreateObj->FirstName.' '.$AccountToCreateObj->MiddleNames.' '.$AccountToCreateObj->LastName;
+        $AccountToCreateObj->FullName = '';
+        if (strlen(trim($AccountToCreateObj->FirstName)) > 0) {
+            $AccountToCreateObj->FullName .= $AccountToCreateObj->FirstName;
+        }
+        if (strlen(trim($AccountToCreateObj->MiddleNames)) > 0) {
+            $AccountToCreateObj->FullName .= ' '.$AccountToCreateObj->MiddleNames;
+        }
+        if (strlen(trim($AccountToCreateObj->LastName)) > 0) {
+            $AccountToCreateObj->FullName .= ' '.$AccountToCreateObj->LastName;
+        }
         if (strlen(trim($AccountToCreateObj->FullName)) == 0) {
             $AccountToCreateObj->FullName = "N/A";
         }
         $AccountToCreateObj->Save();
+    
+        // JGL: We are authenticated. Let's link the current authentication token/client connection to the account obj
+        $ClientAuthenticationTokenObj = ClientAuthenticationToken::LoadByToken($this->CurrentClientAuthenticationToken);
+        if (is_null($ClientAuthenticationTokenObj)) {
+            if ($this->initializeNewAuthenticationToken()) {
+                $ClientAuthenticationTokenObj = ClientAuthenticationToken::LoadByToken($this->CurrentClientAuthenticationToken);
+                if (is_null($ClientAuthenticationTokenObj)) {
+                    $this->setResult(false);
+                    $this->setReturnValue("Message","Could not initialize authentication token");
+                    $this->presentOutput();
+                }
+            }
+        }
+        $ClientConnectionObj = $ClientAuthenticationTokenObj->ClientConnectionObject;
+        if (is_null($ClientConnectionObj)) {
+            $this->setResult(false);
+            $this->setReturnValue("Message","Could not initialize authentication token");
+            $this->presentOutput();
+        }
+        $ClientConnectionObj->AccountObject = $AccountToCreateObj;
+        ProjectFunctions::linkPushRegistrationsToAccount($ClientAuthenticationTokenObj,$AccountToCreateObj);
+        try {
+            $ClientConnectionObj->Save();
+            $this->setResult(true);
+            $UserRole = "";
+            if (!is_null($AccountToCreateObj->UserRoleObject)) {
+                $UserRole = $AccountToCreateObj->UserRoleObject->Role;
+                $this->setReturnValue("UserRole",$UserRole);
+            }
+        } catch (dxCallerException $e) {
+        
+        }
+        
         $this->setResult(true);
         $this->setReturnValue("Message","Object created");
         $this->setReturnValue("Id",$AccountToCreateObj->Id);

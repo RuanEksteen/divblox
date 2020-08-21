@@ -28,5 +28,5 @@ $EnvironmentArray = array(
     ),
 
 );
-$dxApiKey = "5LJb1XdxYmwVfHkAliCaRKNDOcF3E9MshQT40z2qgUp6nrSGtveB87PZjIWyou";
+$dxApiKey = "wMvC5m9iETdBYgbqa423OXlUWG7ISPfycQp8u6HVLzFknR1otxJDjKhZe0srNA";
 ?>

@@ -22,14 +22,31 @@ if (!ALLOW_WIZARD_ACCESS) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../../../../assets/css/bootstrap/4.3.1/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../assets/css/bootstrap/4.5.0/bootstrap.min.css">
     <link rel="stylesheet" href="../../../../assets/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../../../../../project/assets/css/project.css">
     <link rel="icon" href="../../../../../divblox/assets/images/divblox_favicon.ico" />
     <title>dx Setup Wizard</title>
 </head>
 <body>
 <div class="container-fluid">
+    <div class="modal fade" id="RedirectNoticeModal" tabindex="-1" aria-labelledby="RedirectNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="RedirectNoticeModalLabel">Redirect Notice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>You've been redirected to this page because something is not right with your Divblox server configuration. Please follow the instructions on this page to resolve the relevant issues.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12 text-center">
             <img src="../../../../assets/images/divblox_logo.svg" class="img-fluid" style="max-height:50px;"/>
@@ -60,14 +77,22 @@ if (!ALLOW_WIZARD_ACCESS) {
                     /divblox/config/framework/environments.php is present.<br>
                 </span>
             </div>
-            <div id="CheckVersionsWrapper" class="alert alert-info">
-                <span id="CheckingVersions">Checking software versions...<br></span>
+            <div id="CheckPHPVersionsWrapper" class="alert alert-info">
+                <span id="CheckingPHPVersions">Checking php version...<br></span>
                 Current PHP version: <span id="CurrentPhpVersion">N/A</span><br>
-                Minimum required PHP version: <span id="RequiredPhpVersion">N/A</span><br>
+                Minimum required PHP version: <span id="MinimumRequiredPhpVersion">N/A</span><br>
+                Maximum supported PHP version: <span id="MaximumRequiredPhpVersion">N/A</span><br>
                 PHP version status: <span id="PhpVersionStatus">N/A</span><br>
-                <br>
+            </div>
+            <div id="CheckDbVersionsWrapper" class="alert alert-info">
+                <span id="CheckingDbVersions">Checking Database version...<br></span>
                 Current database version: <span id="CurrentDBVersion">N/A</span><br>
-                Minimum required database version: <span id="RequiredDBVersion">N/A</span><br>
+                <strong>MySql</strong><br>
+                Minimum required Database version: <span id="MinimumRequiredMySqlVersion">N/A</span><br>
+                Maximum supported Database version: <span id="MaximumRequiredMySqlVersion">N/A</span><br>
+                <strong>MariaDB</strong><br>
+                Minimum required Database version: <span id="MinimumRequiredMariaDBVersion">N/A</span><br>
+                Maximum supported Database version: <span id="MaximumRequiredMariaDBVersion">N/A</span><br>
                 Database table names case configuration: <span id="TableCaseConfig">N/A</span><br>
                 Database version status: <span id="DBVersionStatus">N/A</span><br>
             </div>
@@ -111,6 +136,12 @@ if (!ALLOW_WIZARD_ACCESS) {
 <script type="text/javascript" src="../../../../assets/js/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="../../../../assets/js/bootstrap/4.3.1/bootstrap.min.js"></script>
 <script>
+    <?php
+        if (isset($_GET['redirect'])) { ?>
+            $('#RedirectNoticeModal').modal('show');
+            $('#CheckDbVersionsWrapper').hide();
+        <?php }
+    ?>
     let config_ok = true;
 	$( document ).ready(function() {
 		checkConfiguration();
@@ -120,7 +151,6 @@ if (!ALLOW_WIZARD_ACCESS) {
 
 	function checkConfiguration() {
 		$.post('../../check_config.php',{},function(data) {
-			console.log("Data: "+data);
 			let data_obj = JSON.parse(data);
 			if (typeof data_obj["Success"] === "undefined") {
 				updateStatusCheckSymbol(true);
@@ -137,7 +167,8 @@ if (!ALLOW_WIZARD_ACCESS) {
                 }
 				$("#CheckConfigWrapper").removeClass("alert-info").addClass("alert-danger");
 				$("#CheckingConfig").html('<strong>Check configuration: </strong><br>');
-				$("#CheckingVersions").html('<strong>Check software versions: </strong><br>');
+				$("#CheckingPHPVersions").html('<strong>Check PHP version: </strong><br>');
+                $("#CheckingDbVersions").html('<strong>Check Database version: </strong><br>');
             } else {
 				updateStatusCheckSymbol(false);
 				$("#ConfigPresent").show();
@@ -146,23 +177,29 @@ if (!ALLOW_WIZARD_ACCESS) {
 				$("#EnvironmentsNotPresent").hide();
 				$("#CheckConfigWrapper").removeClass("alert-info").addClass("alert-success");
 				$("#CheckingConfig").html('<strong>Check configuration: </strong><br>');
-				$("#CheckingVersions").html('<strong>Check software versions: </strong><br>');
+                $("#CheckingPHPVersions").html('<strong>Check PHP version: </strong><br>');
+                $("#CheckingDbVersions").html('<strong>Check Database version: </strong><br>');
 
                 $("#CurrentPhpVersion").html(data_obj.PhpVersion);
-				$("#RequiredPhpVersion").html(data_obj.RequiredPhpVersion);
+				$("#MinimumRequiredPhpVersion").html(data_obj.MinimumRequiredPhpVersion);
+                $("#MaximumRequiredPhpVersion").html(data_obj.MaximumRequiredPhpVersion);
 				if (data_obj.PhpVersionOk !== false) {
 					$("#PhpVersionStatus").html("All good!");
-					$("#CheckVersionsWrapper").removeClass("alert-info").addClass("alert-success");
+					$("#CheckPHPVersionsWrapper").removeClass("alert-info").addClass("alert-success");
                 } else {
 					$("#PhpVersionStatus").html("<strong>Minimum PHP version not met</strong>");
 					updateStatusCheckSymbol(true);
-					$("#CheckVersionsWrapper").removeClass("alert-info").addClass("alert-danger");
+					$("#CheckPHPVersionsWrapper").removeClass("alert-info").addClass("alert-danger");
                 }
 				if (data_obj["DbVersion"]["Version"] === "N/A") {
 					$("#CurrentDBVersion").html(data_obj["DbVersion"]["Version"]+"; Reason: "+data_obj["DbVersion"]["Reason"]);
                 } else {
 					$("#CurrentDBVersion").html(data_obj["DbVersion"]["Server"]+" "+data_obj["DbVersion"]["Version"]);
                 }
+                $("#MinimumRequiredMySqlVersion").html(data_obj.MinimumRequiredMySqlVersion);
+                $("#MaximumRequiredMySqlVersion").html(data_obj.MaximumRequiredMySqlVersion);
+                $("#MinimumRequiredMariaDBVersion").html(data_obj.MinimumRequiredMariaDBVersion);
+                $("#MaximumRequiredMariaDBVersion").html(data_obj.MaximumRequiredMariaDBVersion);
 				$("#RequiredDBVersion").html(data_obj["DbVersion"]["Server"]+" "+data_obj["RequiredDbVersion"]);
 				if (typeof data_obj["DbVersion"]["LowerCaseTableNamesOK"] !== "undefined") {
 					if (data_obj["DbVersion"]["LowerCaseTableNamesOK"] === true) {
@@ -175,11 +212,11 @@ if (!ALLOW_WIZARD_ACCESS) {
                 }
 				if (data_obj["DbVersionOk"] !== false) {
 					$("#DBVersionStatus").html("All good!");
-					$("#CheckVersionsWrapper").removeClass("alert-info").addClass("alert-success");
+					$("#CheckDbVersionsWrapper").removeClass("alert-info").addClass("alert-success");
 				} else {
 					$("#DBVersionStatus").html("<strong>Minimum database version not met</strong>");
 					updateStatusCheckSymbol(true);
-					$("#CheckVersionsWrapper").removeClass("alert-info").addClass("alert-danger");
+					$("#CheckDbVersionsWrapper").removeClass("alert-info").addClass("alert-danger");
 				}
             }
 		}).fail(function() {

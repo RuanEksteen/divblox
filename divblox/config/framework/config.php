@@ -50,9 +50,12 @@ if (is_null($ModuleArray)) {
     error_log("Modules are not configured in environments.php");
     die(json_encode(array("Error" => 'Modules are not configured in environments.php. For a quick fix, delete the file environments.php')));
 }
-define("PHP_MIN_VERSION_REQUIRED","7.3");
+define("PHP_MIN_VERSION_REQUIRED","7.2");
+define("PHP_MAX_VERSION_REQUIRED","7.3.17");
 define("MARIADB_MIN_VERSION_REQUIRED","10.2");
+define("MARIADB_MAX_VERSION_REQUIRED","10.5.4");
 define("MYSQL_MIN_VERSION_REQUIRED","5.7");
+define("MYSQL_MAX_VERSION_REQUIRED","5.7.30");
 define("DIVBLOX_ADMIN_PASSWORD_STR","1");
 define("ENVIRONMENT_INSTANCE_STR",$CurrentEnvironmentInstanceName);
 define("APP_ENCODING_TYPE_STR", "UTF-8");
@@ -64,9 +67,9 @@ define("FRAMEWORK_ROOT_STR",DOCUMENT_ROOT_STR.SUBDIRECTORY_STR."/divblox");
 define("FRAMEWORK_CONFIG_STR", FRAMEWORK_ROOT_STR."/config");
 define("DATA_MODELLER_PATH_STR", FRAMEWORK_CONFIG_STR."/database/data_modeller");
 define("DATA_MODEL_CLASS_PATH_STR", DATA_MODELLER_PATH_STR."/data_model/DataModel.class.php");
-define("DATA_MODEL_ORM_PATH_STR", FRAMEWORK_CONFIG_STR."/database/data_model_orm");
 define("DISABLE_DATA_MODEL_BACKUP_BOOL", true); //JGL: If this is true, the data model sync action will not attempt a backup before sync
 define("PROJECT_ROOT_STR",DOCUMENT_ROOT_STR.SUBDIRECTORY_STR."/project");
+define("DATA_MODEL_ORM_PATH_STR", PROJECT_ROOT_STR."/assets/php/data_model_orm");
 define("MAINTENANCE_PASSWORD_STR",$CurrentEnvironment["MAINTENANCE_PASSWORD"]);
 define("DX_API_KEY_STR",$dxApiKey);
 define("AUTHENTICATION_TIMEOUT_INT",1440); //1440 Minutes = 24 Hours. This means that a user will be logged out after 24 hours since last auth key update
@@ -99,7 +102,7 @@ define("SANDBOX_ACTIVE_BOOL",false); // If true, will disable certain setup page
 define("DISABLE_COMPONENT_SECURITY_CHECKS_BOOL",false); // If true, will disable checking if a user should have access to a component. NB! THIS GIVES ACCESS TO ALL COMPONENTS TO ANY USER!!!
 define("SIMPLIFY_GENERATED_FILE_PERMISSIONS",false); // If true, this will set the file permissions on linux to 770 when generating code. Useful for development environments
 define("LOG_DB_SYNC_TO_ERROR_LOG",false); // If true, while synchronizing the database and generating the ORM, Divblox will log ALL output to the php error log as well.
-
+define("BASE_CAMP_ROOT_STR","https://basecamp.divblox.com");
 //Firebase configuration for push notifications
 //api_key in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
 define("FIREBASE_SERVER_KEY_STR",'xxxxxxxxxxxxxxxxx');
