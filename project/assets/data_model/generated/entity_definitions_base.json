@@ -499,6 +499,27 @@
             }
         }
     },
+    "Category": {
+        "Attributes": {
+            "CategoryName": {
+                "DisplayType": "text",
+                "InputLabel": "Category Name:",
+                "DefaultValue": "",
+                "Placeholder": "Category Name",
+                "Data": null,
+                "ValidationMessage": "Please provide a valid Category Name"
+            },
+            "TotalExpenses": {
+                "DisplayType": "number",
+                "InputLabel": "Total Expenses:",
+                "DefaultValue": "",
+                "Placeholder": "Total Expenses",
+                "Data": null,
+                "ValidationMessage": "Please provide a valid Total Expenses"
+            }
+        },
+        "Relationships": []
+    },
     "ClientAuthenticationToken": {
         "Attributes": {
             "Token": {
@@ -699,6 +720,36 @@
             }
         },
         "Relationships": []
+    },
+    "Expenses": {
+        "Attributes": {
+            "ExpenceName": {
+                "DisplayType": "text",
+                "InputLabel": "Expence Name:",
+                "DefaultValue": "",
+                "Placeholder": "Expence Name",
+                "Data": null,
+                "ValidationMessage": "Please provide a valid Expence Name"
+            },
+            "ExpenseValue": {
+                "DisplayType": "number",
+                "InputLabel": "Expense Value:",
+                "DefaultValue": "",
+                "Placeholder": "Expense Value",
+                "Data": null,
+                "ValidationMessage": "Please provide a valid Expense Value"
+            }
+        },
+        "Relationships": {
+            "Category": {
+                "DisplayType": "list",
+                "InputLabel": "Category:",
+                "DefaultValue": "-Please Select-",
+                "Placeholder": "Category",
+                "Data": null,
+                "ValidationMessage": "Please provide a valid Category"
+            }
+        }
     },
     "FileDocument": {
         "Attributes": {

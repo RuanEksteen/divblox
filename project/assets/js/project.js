@@ -14,8 +14,8 @@ let local_config = {
 // Ensure that user roles are lower case
 let user_role_landing_pages = {
 	"anonymous":"anonymous_landing_page",
-	"administrator":"system_account_management",
-	"user":"my_profile"
+	"administrator":"categoruy_page",
+	"user":"expenses_page"
 };
 let current_user_profile_picture_path = getRootPath()+"project/assets/images/divblox_profile_picture_placeholder.svg";
 /**

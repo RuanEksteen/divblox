@@ -1,6 +1,6 @@
 <?php
 $ModuleArray = array(
-    "Main"
+    "Main",
 );
 $ModuleColorArray = array(
     "Main" => "#65a7b6",
@@ -16,17 +16,17 @@ $EnvironmentArray = array(
         "NATIVE_APP_NAME" => "divblox",
         "NATIVE_APP_DISPLAY_NAME" => "divblox",
         "DATABASES" => array(
-        "Main" => array(
-            'server' => 'localhost',
-            'port' => null,
-            'database' => '[not defined]',
-            'username' => '[not defined]',
-            'password' => '[not defined]',
-            'ssl_cert_path' => ''
-            )
+            "Main" => array(
+                'server' => 'localhost',
+                'port' => null,
+                'database' => 'HelloWorld',
+                'username' => 'divblox',
+                'password' => '1',
+                'ssl_cert_path' => ''
+            ),
         )
-    )
-);
-$dxApiKey = "";
+    ),
 
+);
+$dxApiKey = "5LJb1XdxYmwVfHkAliCaRKNDOcF3E9MshQT40z2qgUp6nrSGtveB87PZjIWyou";
 ?>
