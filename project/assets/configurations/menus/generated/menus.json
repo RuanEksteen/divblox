@@ -1,4 +1,32 @@
 {
+    "Expenses": [
+        {
+            "index": 1,
+            "item_label": "Category",
+            "item_active_class": "categoruy_page",
+            "item_click_class": "menu-Expenses-1",
+            "sub_menu": null,
+            "page_to_load": "categoruy_page",
+            "show_divider": false,
+            "allowed_user_roles": [
+                "Administrator"
+            ],
+            "function_to_execute": null,
+            "javascript_inputs": null
+        },
+        {
+            "index": 2,
+            "item_label": "Expenses",
+            "item_active_class": "expenses_page",
+            "item_click_class": "menu-Expenses-2",
+            "sub_menu": null,
+            "page_to_load": "expenses_page",
+            "show_divider": false,
+            "allowed_user_roles": null,
+            "function_to_execute": null,
+            "javascript_inputs": null
+        }
+    ],
     "default": [
         {
             "index": 1,

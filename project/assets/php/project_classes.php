@@ -464,8 +464,18 @@ class EntityDataSeriesComponentController extends ProjectComponentController {
         }
         $DeleteItemsArray = json_decode($this->getInputValue("SelectedItemArray"));
         $DeleteCount = 0;
+
         foreach($DeleteItemsArray as $item) {
             $EntityToDeleteObj = $EntityNodeNameStr::Load($item);
+            $CategoryObjArr = Category::LoadById($EntityToDeleteObj->Category);
+            $ExpensesObjArr = Expenses::LoadArrayByCategory($EntityToDeleteObj->Category);
+            foreach ($ExpensesObjArr as $ExpensesObj) {
+                if ($EntityToDeleteObj->Id == $ExpensesObj->Id) {
+                    $CategoryObjArr->TotalExpenses -= $ExpensesObj->ExpenseValue;
+                }
+            }
+
+            $CategoryObjArr->Save();
             if (is_null($EntityToDeleteObj)) {
                 continue;
             }
