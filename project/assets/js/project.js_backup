@@ -15,7 +15,7 @@ let local_config = {
 let user_role_landing_pages = {
 	"anonymous":"anonymous_landing_page",
 	"administrator":"system_account_management",
-	"user":"expenses_page"
+	"user":"my_profile"
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
